@@ -7,9 +7,6 @@ https://github.com/weltenwort/home-assistant-rct-power-integration
 import asyncio
 import logging
 from datetime import timedelta
-from typing import Any
-from typing import Callable
-from typing import cast
 from typing import Literal
 
 from homeassistant.config_entries import ConfigEntry
@@ -118,13 +115,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> Literal[
 
     remove_update_listener = entry.add_update_listener(async_reload_entry)
 
-    for platform in PLATFORMS:
-        hass.async_add_job(  # type: ignore
-            cast(
-                Callable[[Any, Any], Any],
-                hass.config_entries.async_forward_entry_setup(entry, platform),
-            )
-        )
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     domain_data[entry.entry_id] = RctPowerContext(
         update_coordinators={
