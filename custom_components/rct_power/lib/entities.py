@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-from typing import List
 
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.components.sensor import SensorStateClass
@@ -19,7 +18,7 @@ from .state_helpers import get_first_api_response_value_as_timestamp
 from .state_helpers import sum_api_response_values_as_state
 
 
-def get_matching_names(expression: str):
+def get_matching_names(expression: str) -> list[str]:
     compiled_expression = re.compile(expression)
     return [
         object_info.name
@@ -28,7 +27,7 @@ def get_matching_names(expression: str):
     ]
 
 
-battery_sensor_entity_descriptions: List[RctPowerSensorEntityDescription] = [
+battery_sensor_entity_descriptions: list[RctPowerSensorEntityDescription] = [
     RctPowerSensorEntityDescription(
         get_device_info=get_battery_device_info,
         key="battery.bms_sn",
@@ -222,7 +221,7 @@ battery_sensor_entity_descriptions: List[RctPowerSensorEntityDescription] = [
     ),
 ]
 
-inverter_sensor_entity_descriptions: List[RctPowerSensorEntityDescription] = [
+inverter_sensor_entity_descriptions: list[RctPowerSensorEntityDescription] = [
     RctPowerSensorEntityDescription(
         get_device_info=get_inverter_device_info,
         key="adc.u_acc",
@@ -735,7 +734,7 @@ inverter_sensor_entity_descriptions: List[RctPowerSensorEntityDescription] = [
     ),
 ]
 
-bitfield_sensor_entity_descriptions: List[RctPowerBitfieldSensorEntityDescription] = [
+bitfield_sensor_entity_descriptions: list[RctPowerBitfieldSensorEntityDescription] = [
     RctPowerBitfieldSensorEntityDescription(
         get_device_info=get_inverter_device_info,
         key="fault.flt",

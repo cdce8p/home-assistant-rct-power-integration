@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import get_args
-from typing import Literal
-from typing import Optional
+from enum import StrEnum
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.typing import StateType
@@ -17,7 +15,7 @@ from .const import NUMERIC_STATE_DECIMAL_DIGITS
 
 def get_first_api_response_value_as_state(
     entity: SensorEntity,
-    values: list[Optional[ApiResponseValue]],
+    values: list[ApiResponseValue | None],
 ) -> StateType:
     if len(values) <= 0:
         return None
@@ -27,7 +25,7 @@ def get_first_api_response_value_as_state(
 
 def get_api_response_value_as_state(
     entity: SensorEntity,
-    value: Optional[ApiResponseValue],
+    value: ApiResponseValue | None,
 ) -> StateType:
     if isinstance(value, bytes):
         return value.hex()
@@ -49,7 +47,7 @@ def get_api_response_value_as_state(
 
 def get_first_api_reponse_value_as_absolute_state(
     entity: SensorEntity,
-    values: list[Optional[ApiResponseValue]],
+    values: list[ApiResponseValue | None],
 ) -> StateType:
     value = get_first_api_response_value_as_state(entity=entity, values=values)
 
@@ -61,8 +59,8 @@ def get_first_api_reponse_value_as_absolute_state(
 
 def sum_api_response_values_as_state(
     entity: SensorEntity,
-    values: list[Optional[ApiResponseValue]],
-) -> StateType:
+    values: list[ApiResponseValue | None],
+) -> float:
     return sum(
         (
             float(state_value)
@@ -79,37 +77,43 @@ def sum_api_response_values_as_state(
 #
 # Battery status
 #
-BatteryStatus = Literal[
-    "normal", "charging", "discharging", "calibrating", "balancing", "other"
-]
-available_battery_status: list[BatteryStatus] = list(get_args(BatteryStatus))
+class BatteryStatus(StrEnum):
+    NORMAL = "normal"
+    CHARGING = "charging"
+    DISCHARGING = "discharging"
+    CALIBRATING = "calibrating"
+    BALANCING = "balancing"
+    OTHER = "other"
+
+
+available_battery_status: list[str] = list(BatteryStatus._value2member_map_)
 
 
 def get_api_response_value_as_battery_status(
     entity: SensorEntity,
-    value: Optional[ApiResponseValue],
+    value: ApiResponseValue | None,
 ) -> BatteryStatus | None:
     if not isinstance(value, int):
         return None
 
     match BatteryStatusFlag(value):
         case BatteryStatusFlag.calibrating:
-            return "calibrating"
+            return BatteryStatus.CALIBRATING
         case BatteryStatusFlag.charging:
-            return "charging"
+            return BatteryStatus.CHARGING
         case BatteryStatusFlag.discharging:
-            return "discharging"
+            return BatteryStatus.DISCHARGING
         case BatteryStatusFlag.balancing:
-            return "balancing"
+            return BatteryStatus.BALANCING
         case BatteryStatusFlag.normal:
-            return "normal"
+            return BatteryStatus.NORMAL
         case _:
-            return "other"
+            return BatteryStatus.OTHER
 
 
 def get_first_api_response_value_as_battery_status(
     entity: SensorEntity,
-    values: list[Optional[ApiResponseValue]],
+    values: list[ApiResponseValue | None],
 ) -> BatteryStatus | None:
     match values:
         case [firstValue, *_] if firstValue is not None:
@@ -123,8 +127,8 @@ def get_first_api_response_value_as_battery_status(
 #
 def get_api_response_values_as_bitfield(
     entity: SensorEntity,
-    values: list[Optional[ApiResponseValue]],
-) -> StateType:
+    values: list[ApiResponseValue | None],
+) -> str:
     return "".join(f"{value:b}" for value in values if isinstance(value, int))
 
 
@@ -133,8 +137,8 @@ def get_api_response_values_as_bitfield(
 #
 def get_first_api_response_value_as_timestamp(
     entity: SensorEntity,
-    values: list[Optional[ApiResponseValue]],
-) -> StateType:
+    values: list[ApiResponseValue | None],
+) -> datetime | None:
     if len(values) <= 0:
         return None
 
@@ -143,8 +147,8 @@ def get_first_api_response_value_as_timestamp(
 
 def get_api_response_value_as_timestamp(
     entity: SensorEntity,
-    value: Optional[ApiResponseValue],
-) -> StateType:
+    value: ApiResponseValue | None,
+) -> datetime | None:
     if isinstance(value, int):
         return as_local(datetime.fromtimestamp(value))
 
