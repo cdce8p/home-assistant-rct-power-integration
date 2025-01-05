@@ -147,8 +147,7 @@ class RctPowerApiClient:
                             continue
 
                         decoded_value: ApiResponseValue = decode_value(
-                            data_type,  # type: ignore
-                            response_frame.data,
+                            data_type, response_frame.data
                         )  # type: ignore
 
                         LOGGER.debug(
