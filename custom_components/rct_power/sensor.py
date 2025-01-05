@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Callable
-from typing import List
+from collections.abc import Callable
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
@@ -19,7 +18,7 @@ from .lib.entity import RctPowerSensorEntity
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: RctConfigEntry,
-    async_add_entities: Callable[[List[Entity]], None],
+    async_add_entities: Callable[[list[Entity]], None],
 ):
     """Setup sensor platform."""
     data = entry.runtime_data

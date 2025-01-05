@@ -8,7 +8,6 @@ from dataclasses import dataclass
 from datetime import datetime
 import logging
 import struct
-from typing import Dict, List, Optional, Tuple, TypeVar, Union
 
 import async_timeout
 from homeassistant.helpers.update_coordinator import UpdateFailed
@@ -23,16 +22,15 @@ READ_TIMEOUT = 2
 INVERTER_SN_OID = 0x7924ABD9
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
-ApiResponseValue = Union[
-    bool,
-    bytes,
-    float,
-    int,
-    str,
-    Tuple[datetime, Dict[datetime, int]],
-    Tuple[datetime, Dict[datetime, EventEntry]],
-]
-DefaultResponseValue = TypeVar("DefaultResponseValue")
+type ApiResponseValue = (
+    bool
+    | bytes
+    | float
+    | int
+    | str
+    | tuple[datetime, dict[datetime, int]]
+    | tuple[datetime, dict[datetime, EventEntry]]
+)
 
 
 @dataclass
@@ -51,14 +49,13 @@ class InvalidApiResponse(BaseApiResponse):
     cause: str
 
 
-ApiResponse = Union[ValidApiResponse, InvalidApiResponse]
-RctPowerData = Dict[int, ApiResponse]
+type ApiResponse = ValidApiResponse | InvalidApiResponse
+type RctPowerData = dict[int, ApiResponse]
 
 
-def get_valid_response_value_or(
-    response: Optional[ApiResponse],
-    defaultValue: DefaultResponseValue,
-) -> Union[ApiResponseValue, DefaultResponseValue]:
+def get_valid_response_value_or[
+    _R
+](response: ApiResponse | None, defaultValue: _R) -> ApiResponseValue | _R:
     if isinstance(response, ValidApiResponse):
         return response.value
     else:
@@ -75,7 +72,7 @@ class RctPowerApiClient:
         # inverter's firmware doesn't handle it well at the time of writing
         self._connection_lock = Lock()
 
-    async def get_serial_number(self) -> Optional[str]:
+    async def get_serial_number(self) -> str | None:
         inverter_data = await self.async_get_data([INVERTER_SN_OID])
 
         inverter_sn_response = inverter_data.get(INVERTER_SN_OID)
@@ -87,7 +84,7 @@ class RctPowerApiClient:
         else:
             return None
 
-    async def async_get_data(self, object_ids: List[int]) -> RctPowerData:
+    async def async_get_data(self, object_ids: list[int]) -> RctPowerData:
         async with self._connection_lock:
             async with async_timeout.timeout(CONNECTION_TIMEOUT):
                 reader, writer = await open_connection(
@@ -149,15 +146,7 @@ class RctPowerApiClient:
                             )
                             continue
 
-                        decoded_value: Union[
-                            bool,
-                            bytes,
-                            float,
-                            int,
-                            str,
-                            Tuple[datetime, Dict[datetime, int]],
-                            Tuple[datetime, Dict[datetime, EventEntry]],
-                        ] = decode_value(
+                        decoded_value: ApiResponseValue = decode_value(
                             data_type, response_frame.data
                         )  # type: ignore
 

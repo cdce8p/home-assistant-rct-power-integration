@@ -11,7 +11,7 @@ from custom_components.rct_power.lib.const import DOMAIN
 from custom_components.rct_power.lib.entry import RctPowerConfigEntryData
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.common import MockConfigEntry  # type: ignore[import-untyped]
 
 
 # We can pass fixtures as defined in conftest.py to tell pytest to use the fixture
