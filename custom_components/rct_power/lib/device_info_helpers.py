@@ -45,7 +45,7 @@ def get_battery_device_info(entity: RctPowerEntity) -> DeviceInfo:
                 bms_sn,
             ),
         },  # type: ignore
-        name=f"Battery at {entity.get_valid_api_response_value_by_name('android_description', '')}",
+        name=f"Battery at {entity.get_valid_api_response_value_by_name('android_description', '')}",  # type: ignore[str-bytes-safe]
         sw_version=str(
             entity.get_valid_api_response_value_by_name(
                 "battery.bms_software_version", ""
