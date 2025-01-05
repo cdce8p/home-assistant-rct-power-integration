@@ -25,12 +25,7 @@ rctclient = "^0.0.3"
 pre-commit = "^4.1.0"
 pytest = "^8.3.4"
 pytest-homeassistant-custom-component = "^0.13.215"
-
-[tool.pyright]
-typeCheckingMode = "strict"
-reportMissingTypeStubs = "none"
-reportImportCycles = "warning"
-useLibraryCodeForTypes = true
+mypy-dev = "^1.16.0a4"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
@@ -39,3 +34,6 @@ asyncio_mode = "auto"
 extend-select = [
     "I", # isort
 ]
+
+[tool.mypy]
+strict = true
