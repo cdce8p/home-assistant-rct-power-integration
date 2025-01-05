@@ -1,24 +1,26 @@
 from __future__ import annotations
 
 from dataclasses import Field, MISSING, fields
-from typing import Any, List, Optional
+from typing import Any
 
-from voluptuous import Optional as OptionalField, Required as RequiredField, Schema
+import voluptuous as vol
 
 
 def get_key_for_field(field: Field[Any]):
     if field.default == MISSING:
-        return RequiredField(field.name)
+        return vol.Required(field.name)
 
-    return OptionalField(field.name, default=field.default)
+    return vol.Optional(field.name, default=field.default)
 
 
-def get_schema_for_field(field: Field[Any]):
+def get_schema_for_field(field: Field[Any]) -> Any:
     return field.metadata.get("schema_type", field.type)
 
 
-def get_schema_for_dataclass(cls: type, allow_fields: Optional[List[str]] = None):
-    return Schema(
+def get_schema_for_dataclass(
+    cls: type, allow_fields: list[str] | None = None
+) -> vol.Schema:
+    return vol.Schema(
         {
             get_key_for_field(field): get_schema_for_field(field)
             for field in fields(cls)
