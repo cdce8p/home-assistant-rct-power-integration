@@ -1,5 +1,7 @@
 """Sample API Client."""
 
+from __future__ import annotations
+
 from asyncio import StreamReader, StreamWriter, TimeoutError, open_connection
 from asyncio.locks import Lock
 from dataclasses import dataclass
