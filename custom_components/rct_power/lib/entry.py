@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, Self
 
+import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 
 from .const import DOMAIN
@@ -15,7 +17,7 @@ class RctPowerConfigEntryData:
     entity_prefix: str = "RCT Power Storage"
 
     @classmethod
-    def from_config_entry(cls, config_entry: ConfigEntry):
+    def from_config_entry(cls, config_entry: ConfigEntry) -> Self:
         if config_entry.domain != DOMAIN:
             raise TypeError(
                 "Failed to configure the integration: Mismatching config entry domain."
@@ -24,13 +26,13 @@ class RctPowerConfigEntryData:
         return cls(**config_entry.data)
 
     @classmethod
-    def from_user_input(cls, user_input: object):
+    def from_user_input(cls, user_input: dict[str, Any]) -> Self:
         valid_user_input = get_schema_for_dataclass(cls)(user_input)
 
         return cls(**valid_user_input)
 
     @classmethod
-    def get_schema(cls):
+    def get_schema(cls) -> vol.Schema:
         return get_schema_for_dataclass(cls)
 
 
@@ -45,7 +47,7 @@ class RctPowerConfigEntryOptions:
     static_scan_interval: int = 60 * 60
 
     @classmethod
-    def from_config_entry(cls, config_entry: ConfigEntry):
+    def from_config_entry(cls, config_entry: ConfigEntry) -> Self:
         if config_entry.domain != DOMAIN:
             raise TypeError(
                 "Failed to configure the integration: Mismatching config entry domain."
@@ -54,13 +56,13 @@ class RctPowerConfigEntryOptions:
         return cls(**config_entry.options)
 
     @classmethod
-    def from_user_input(cls, user_input):
+    def from_user_input(cls, user_input: dict[str, Any]) -> Self:
         valid_user_input = get_schema_for_dataclass(cls)(user_input)
 
         return cls(**valid_user_input)
 
     @classmethod
-    def get_schema(cls):
+    def get_schema(cls) -> vol.Schema:
         return get_schema_for_dataclass(cls)
 
 
