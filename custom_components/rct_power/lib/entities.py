@@ -12,7 +12,7 @@ from .entity import EntityUpdatePriority
 from .entity import RctPowerBitfieldSensorEntityDescription
 from .entity import RctPowerSensorEntityDescription
 from .state_helpers import available_battery_status
-from .state_helpers import get_first_api_reponse_value_as_absolute_state
+from .state_helpers import get_first_api_response_value_as_absolute_state
 from .state_helpers import get_first_api_response_value_as_battery_status
 from .state_helpers import get_first_api_response_value_as_timestamp
 from .state_helpers import sum_api_response_values_as_state
@@ -609,7 +609,7 @@ inverter_sensor_entity_descriptions: list[RctPowerSensorEntityDescription] = [
         name="Grid Energy Production Absolute Total",
         update_priority=EntityUpdatePriority.INFREQUENT,
         state_class=SensorStateClass.TOTAL_INCREASING,
-        get_native_value=get_first_api_reponse_value_as_absolute_state,
+        get_native_value=get_first_api_response_value_as_absolute_state,
     ),
     RctPowerSensorEntityDescription(
         get_device_info=get_inverter_device_info,
