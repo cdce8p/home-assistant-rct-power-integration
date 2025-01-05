@@ -47,9 +47,7 @@ class RctPowerEntity(MultiCoordinatorEntity):
     ):
         super().__init__(coordinators)
         self.config_entry = config_entry
-        self.entity_description = (  # pyright: ignore [reportIncompatibleVariableOverride]
-            entity_description
-        )
+        self.entity_description = entity_description
         self.object_infos = resolve_object_infos(self.entity_description)
 
     def get_api_response_by_id(
@@ -132,7 +130,7 @@ class RctPowerEntity(MultiCoordinatorEntity):
 
 
 class RctPowerSensorEntity(SensorEntity, RctPowerEntity):
-    entity_description: RctPowerSensorEntityDescription  # pyright: ignore [reportIncompatibleVariableOverride]
+    entity_description: RctPowerSensorEntityDescription
 
     def get_valid_api_responses(self) -> list[ApiResponseValue | None]:
         return [
