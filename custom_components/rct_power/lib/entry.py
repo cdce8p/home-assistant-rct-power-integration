@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Self
 
+import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.typing import VolSchemaType
 
