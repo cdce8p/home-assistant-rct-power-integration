@@ -6,7 +6,9 @@ import pytest
 from homeassistant.const import CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.common import (  # type: ignore[import-untyped]
+    MockConfigEntry,
+)
 
 from custom_components.rct_power import RctData, async_setup_entry
 from custom_components.rct_power.const import (
