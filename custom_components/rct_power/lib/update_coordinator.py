@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datetime import timedelta
 from logging import Logger
 from typing import List, Optional

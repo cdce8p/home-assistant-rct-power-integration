@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import Field, MISSING, fields
 from typing import Any, List, Optional
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from asyncio.tasks import gather
 from typing import List
 
