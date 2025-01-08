@@ -11,16 +11,8 @@ def get_inverter_device_info(entity: RctPowerEntity) -> DeviceInfo:
 
     return DeviceInfo(
         identifiers={
-            (
-                DOMAIN,
-                "STORAGE",
-                inverter_sn,
-            ),
-            (
-                DOMAIN,
-                inverter_sn,
-            ),
-        },  # type: ignore
+            (DOMAIN, f"STORAGE_{inverter_sn}"),
+        },
         name=str(
             entity.get_valid_api_response_value_by_name("android_description", ""),
         ),
@@ -32,19 +24,12 @@ def get_inverter_device_info(entity: RctPowerEntity) -> DeviceInfo:
 
 def get_battery_device_info(entity: RctPowerEntity) -> DeviceInfo:
     bms_sn = str(entity.get_valid_api_response_value_by_name("battery.bms_sn", None))
+    inverter_sn = str(entity.get_valid_api_response_value_by_name("inverter_sn", None))
 
     return DeviceInfo(
         identifiers={
-            (
-                DOMAIN,
-                "BATTERY",
-                bms_sn,
-            ),
-            (
-                DOMAIN,
-                bms_sn,
-            ),
-        },  # type: ignore
+            (DOMAIN, f"BATTERY_{bms_sn}"),
+        },
         name=f"Battery at {entity.get_valid_api_response_value_by_name('android_description', '')}",
         sw_version=str(
             entity.get_valid_api_response_value_by_name(
@@ -53,8 +38,5 @@ def get_battery_device_info(entity: RctPowerEntity) -> DeviceInfo:
         ),
         model=BATTERY_MODEL,
         manufacturer=NAME,
-        via_device=(
-            DOMAIN,
-            str(entity.get_valid_api_response_value_by_name("inverter_sn", None)),
-        ),
+        via_device=(DOMAIN, f"STORAGE_{inverter_sn}"),
     )
