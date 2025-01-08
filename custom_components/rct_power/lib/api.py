@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+import logging
+import struct
 from asyncio import StreamReader, StreamWriter, TimeoutError, open_connection
 from asyncio.locks import Lock
 from dataclasses import dataclass
 from datetime import datetime
-import logging
-import struct
 
 import async_timeout
 from homeassistant.helpers.update_coordinator import UpdateFailed

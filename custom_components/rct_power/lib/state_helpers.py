@@ -8,9 +8,11 @@ from homeassistant.helpers.typing import StateType
 from homeassistant.util.dt import as_local
 
 from .api import ApiResponseValue
-from .const import BatteryStatusFlag
-from .const import FREQUENCY_STATE_DECIMAL_DIGITS
-from .const import NUMERIC_STATE_DECIMAL_DIGITS
+from .const import (
+    FREQUENCY_STATE_DECIMAL_DIGITS,
+    NUMERIC_STATE_DECIMAL_DIGITS,
+    BatteryStatusFlag,
+)
 
 
 def get_first_api_response_value_as_state(

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import Field, MISSING, fields
+from dataclasses import MISSING, Field, fields
 from typing import Any
 
 import voluptuous as vol

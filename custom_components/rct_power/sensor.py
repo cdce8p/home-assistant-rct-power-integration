@@ -8,11 +8,12 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
 
 from . import RctConfigEntry
-from .lib.entities import battery_sensor_entity_descriptions
-from .lib.entities import bitfield_sensor_entity_descriptions
-from .lib.entities import inverter_sensor_entity_descriptions
-from .lib.entity import RctPowerBitfieldSensorEntity
-from .lib.entity import RctPowerSensorEntity
+from .lib.entities import (
+    battery_sensor_entity_descriptions,
+    bitfield_sensor_entity_descriptions,
+    inverter_sensor_entity_descriptions,
+)
+from .lib.entity import RctPowerBitfieldSensorEntity, RctPowerSensorEntity
 
 
 async def async_setup_entry(
