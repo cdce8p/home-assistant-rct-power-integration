@@ -7,14 +7,13 @@ from logging import Logger, getLogger
 from typing import Any
 
 from homeassistant import config_entries
-from homeassistant.core import callback
 from homeassistant.config_entries import ConfigEntry, ConfigFlowResult
+from homeassistant.core import callback
 from voluptuous.error import MultipleInvalid
 
 from .lib.api import RctPowerApiClient
 from .lib.const import DOMAIN
 from .lib.entry import RctPowerConfigEntryData, RctPowerConfigEntryOptions, get_title
-
 
 _LOGGER: Logger = getLogger(__package__)
 
