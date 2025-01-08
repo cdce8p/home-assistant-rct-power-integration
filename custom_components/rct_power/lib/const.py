@@ -1,6 +1,6 @@
 """Constants for RCT Power."""
 
-from enum import Enum, IntFlag, auto, KEEP
+from enum import KEEP, Enum, IntFlag, auto
 from typing import Final
 
 from homeassistant.const import Platform
