@@ -5,11 +5,7 @@ from __future__ import annotations
 from enum import KEEP, Enum, IntFlag, auto
 from typing import Final
 
-from homeassistant.const import Platform
-
 NAME: Final = "RCT Power"
-DOMAIN: Final = "rct_power"
-VERSION: Final = "0.14.2"
 
 # Inverter
 INVERTER_MODEL: Final = "RCT Power Storage"
@@ -20,14 +16,6 @@ BATTERY_MODEL: Final = "RCT Power Battery"
 # Icons
 ICON = "mdi:solar-power"
 
-# Platforms
-PLATFORMS = [Platform.SENSOR]
-
-# Configuration and options
-CONF_ENABLED: Final = "enabled"
-CONF_HOSTNAME: Final = "hostname"
-CONF_PORT: Final = "port"
-CONF_SCAN_INTERVAL: Final = "scan_interval"
 
 # Defaults
 NUMERIC_STATE_DECIMAL_DIGITS: Final = 1

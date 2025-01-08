@@ -6,7 +6,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .const import LOGGER
+from .const import DOMAIN, LOGGER
 from .lib.api import (
     ApiResponseValue,
     InvalidApiResponse,
@@ -14,7 +14,6 @@ from .lib.api import (
     RctPowerData,
     ValidApiResponse,
 )
-from .lib.const import DOMAIN
 
 
 class RctPowerDataUpdateCoordinator(DataUpdateCoordinator[RctPowerData]):
@@ -30,7 +29,7 @@ class RctPowerDataUpdateCoordinator(DataUpdateCoordinator[RctPowerData]):
         name_suffix: str,
         client: RctPowerApiClient,
         object_ids: list[int],
-        update_interval: timedelta | None = None,
+        update_interval: int,
     ) -> None:
         self.client = client
         self.object_ids = object_ids
@@ -39,7 +38,7 @@ class RctPowerDataUpdateCoordinator(DataUpdateCoordinator[RctPowerData]):
             config_entry=entry,
             logger=LOGGER,
             name=f"{DOMAIN} {entry.unique_id} {name_suffix}",
-            update_interval=update_interval,
+            update_interval=timedelta(seconds=update_interval),
         )
 
     def get_latest_response(
@@ -57,9 +56,6 @@ class RctPowerDataUpdateCoordinator(DataUpdateCoordinator[RctPowerData]):
         if isinstance(latest_response, ValidApiResponse):
             return latest_response.value
         return default_value
-
-    def has_valid_value(self, object_id: int) -> bool:
-        return isinstance(self.get_latest_response(object_id), ValidApiResponse)
 
     async def _async_update_data(self) -> RctPowerData:
         return await self.client.async_get_data(object_ids=self.object_ids)

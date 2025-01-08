@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from homeassistant.const import CONF_PORT
+from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from pytest_homeassistant_custom_component.common import (  # type: ignore[import-untyped]
@@ -13,11 +13,10 @@ from pytest_homeassistant_custom_component.common import (  # type: ignore[impor
 from custom_components.rct_power import RctData, async_setup_entry, async_unload_entry
 from custom_components.rct_power.const import (
     CONF_ENTITY_PREFIX,
-    CONF_HOSTNAME,
     DEFAULT_ENTITY_PREFIX,
     DEFAULT_PORT,
+    DOMAIN,
 )
-from custom_components.rct_power.lib.const import DOMAIN
 
 
 # We can pass fixtures as defined in conftest.py to tell pytest to use the fixture
@@ -32,11 +31,12 @@ async def test_setup_unload_and_reload_entry(hass: HomeAssistant) -> None:
     config_entry = MockConfigEntry(
         domain=DOMAIN,
         data={
-            CONF_HOSTNAME: "localhost",
+            CONF_HOST: "localhost",
             CONF_PORT: DEFAULT_PORT,
             CONF_ENTITY_PREFIX: DEFAULT_ENTITY_PREFIX,
         },
         entry_id="test",
+        version=2,
     )
 
     config_entry.add_to_hass(hass)
@@ -63,11 +63,12 @@ async def test_setup_entry_exception(hass: HomeAssistant) -> None:
     config_entry = MockConfigEntry(
         domain=DOMAIN,
         data={
-            CONF_HOSTNAME: "localhost",
+            CONF_HOST: "localhost",
             CONF_PORT: DEFAULT_PORT,
             CONF_ENTITY_PREFIX: DEFAULT_ENTITY_PREFIX,
         },
         entry_id="test",
+        version=2,
     )
 
     # In this case we are testing the condition where async_setup_entry raises
