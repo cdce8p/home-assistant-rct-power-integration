@@ -2,40 +2,37 @@
 
 from __future__ import annotations
 
-# Base component constants
 from enum import KEEP, Enum, IntFlag, auto
+from typing import Final
 
-NAME = "RCT Power"
-DOMAIN = "rct_power"
-DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.14.1"
+from homeassistant.const import Platform
 
-ISSUE_URL = "https://github.com/weltenwort/home-assistant-rct-power-integration/issues"
+NAME: Final = "RCT Power"
+DOMAIN: Final = "rct_power"
+VERSION: Final = "0.14.1"
+
+ISSUE_URL = "https://github.com/cdce8p/home-assistant-rct-power-integration/issues"
 
 # Inverter
-INVERTER_MODEL = "RCT Power Storage"
+INVERTER_MODEL: Final = "RCT Power Storage"
 
 # Battery
-BATTERY_MODEL = "RCT Power Battery"
+BATTERY_MODEL: Final = "RCT Power Battery"
 
 # Icons
 ICON = "mdi:solar-power"
 
 # Platforms
-BINARY_SENSOR = "binary_sensor"
-SENSOR = "sensor"
-PLATFORMS = [SENSOR]
+PLATFORMS = [Platform.SENSOR]
 
 # Configuration and options
-CONF_ENABLED = "enabled"
-CONF_HOSTNAME = "hostname"
-CONF_PORT = "port"
-CONF_SCAN_INTERVAL = "scan_interval"
+CONF_ENABLED: Final = "enabled"
+CONF_HOSTNAME: Final = "hostname"
+CONF_PORT: Final = "port"
+CONF_SCAN_INTERVAL: Final = "scan_interval"
 
 # Defaults
-DEFAULT_NAME = DOMAIN
-
-STARTUP_MESSAGE = f"""
+STARTUP_MESSAGE: Final = f"""
 -------------------------------------------------------------------
 {NAME}
 Version: {VERSION}
@@ -45,8 +42,8 @@ If you have any issues with this you need to open an issue here:
 -------------------------------------------------------------------
 """
 
-NUMERIC_STATE_DECIMAL_DIGITS = 1
-FREQUENCY_STATE_DECIMAL_DIGITS = 3
+NUMERIC_STATE_DECIMAL_DIGITS: Final = 1
+FREQUENCY_STATE_DECIMAL_DIGITS: Final = 3
 
 
 class EntityUpdatePriority(Enum):
