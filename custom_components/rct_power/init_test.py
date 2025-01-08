@@ -19,9 +19,8 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry  # type
 # Home Assistant using the pytest_homeassistant_custom_component plugin.
 # Assertions allow you to verify that the return value of whatever is on the left
 # side of the assertion matches with the right side.
-async def test_setup_unload_and_reload_entry(
-    hass: HomeAssistant, bypass_get_data: None
-):
+@pytest.mark.usefixtures("bypass_get_data")
+async def test_setup_unload_and_reload_entry(hass: HomeAssistant) -> None:
     """Test entry setup and unload."""
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(
@@ -49,7 +48,8 @@ async def test_setup_unload_and_reload_entry(
     await hass.async_block_till_done()
 
 
-async def test_setup_entry_exception(hass: HomeAssistant, error_on_get_data: None):
+@pytest.mark.usefixtures("error_on_get_data")
+async def test_setup_entry_exception(hass: HomeAssistant) -> None:
     """Test ConfigEntryNotReady when API raises an exception during entry setup."""
     config_entry = MockConfigEntry(
         domain=DOMAIN,
