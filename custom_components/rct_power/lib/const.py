@@ -2,34 +2,31 @@
 
 from __future__ import annotations
 
-# Base component constants
 from enum import KEEP, Enum, IntFlag, auto
+from typing import Final
 
-NAME = "RCT Power"
-DOMAIN = "rct_power"
-DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.14.1"
+from homeassistant.const import Platform
+
+NAME: Final = "RCT Power"
+DOMAIN: Final = "rct_power"
+VERSION: Final = "0.14.1"
 
 # Inverter
-INVERTER_MODEL = "RCT Power Storage"
+INVERTER_MODEL: Final = "RCT Power Storage"
 
 # Battery
-BATTERY_MODEL = "RCT Power Battery"
+BATTERY_MODEL: Final = "RCT Power Battery"
 
 # Icons
 ICON = "mdi:solar-power"
 
 # Platforms
-BINARY_SENSOR = "binary_sensor"
-SENSOR = "sensor"
-PLATFORMS = [SENSOR]
+PLATFORMS = [Platform.SENSOR]
 
 
 # Defaults
-DEFAULT_NAME = DOMAIN
-
-NUMERIC_STATE_DECIMAL_DIGITS = 1
-FREQUENCY_STATE_DECIMAL_DIGITS = 3
+NUMERIC_STATE_DECIMAL_DIGITS: Final = 1
+FREQUENCY_STATE_DECIMAL_DIGITS: Final = 3
 
 
 class EntityUpdatePriority(Enum):
