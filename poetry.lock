@@ -2056,6 +2056,61 @@ files = [
 ]
 
 [[package]]
+name = "mypy-dev"
+version = "1.15.0a1"
+description = "Optional static typing for Python"
+optional = false
+python-versions = ">=3.9"
+groups = ["dev"]
+files = [
+    {file = "mypy_dev-1.15.0a1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:7359f803a87b621e35248a17109e58edc6265573a9bcd3c36486385619eb9409"},
+    {file = "mypy_dev-1.15.0a1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:89515c64723a484784ea4129bef284998a14390f10477243c49bade6df130cd3"},
+    {file = "mypy_dev-1.15.0a1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:72a30ff7ff6ce97e47787ecb88fbc37a312cb20e6662224e4fff640e21eed52f"},
+    {file = "mypy_dev-1.15.0a1-cp310-cp310-win_amd64.whl", hash = "sha256:c5b0dc2bbf18a535c5d4c9a950dae3a298895c38944fc255269fbe4002058b53"},
+    {file = "mypy_dev-1.15.0a1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:82375e72031f96ba9a8ad91e3dbf488b537e6f2e9663059c0931d51652d08fd7"},
+    {file = "mypy_dev-1.15.0a1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:b8fdb0e2c3bfa8e5b2672e2272c325526a7d999b47d6452996a66bd17c22a5c8"},
+    {file = "mypy_dev-1.15.0a1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:8b581e7689765e864b885c9dcd0c77f2364a7ec8e238b2cfb6b8911f282ec253"},
+    {file = "mypy_dev-1.15.0a1-cp311-cp311-win_amd64.whl", hash = "sha256:2a04e2acdcbeaf4a453a142abc7c4aa61475f0682c943e2ba3e63649698c3d8a"},
+    {file = "mypy_dev-1.15.0a1-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:d0ac94f905881366583f3726acc10a9850df96ec60a12e18a755951d0255b0bf"},
+    {file = "mypy_dev-1.15.0a1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:05b0d352e493a554619882f081c347079f3f6be2a7f991fe6c5fcf77d71cfd7d"},
+    {file = "mypy_dev-1.15.0a1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:9acc0e0b4b7996d1fe1a9c0be493f7669344f54653c86cd3d735f862dbb3657d"},
+    {file = "mypy_dev-1.15.0a1-cp312-cp312-win_amd64.whl", hash = "sha256:878cc3cf8c7cde98388dce234feab2615be94f71c6e9927393971b4a04af9726"},
+    {file = "mypy_dev-1.15.0a1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:0cfce30a4ffee35630371df4a92d652b999520ee8f23213e1ec9f240c635a266"},
+    {file = "mypy_dev-1.15.0a1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:1b3fbee410745519b24b0ff700fbf71a07a890a12572ba0f8d3008c719a3ac31"},
+    {file = "mypy_dev-1.15.0a1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:94504893eab01df3a6c82a4ede4689cfc81cce65c2559aec72a35188d0895828"},
+    {file = "mypy_dev-1.15.0a1-cp313-cp313-win_amd64.whl", hash = "sha256:cb2ec7c4c55aa46c66e5f53cdd1df540b044a3bf8fadb78d7f8e670cfeedfe01"},
+    {file = "mypy_dev-1.15.0a1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:0718fd08e16d47ad0df16826e279c6f458338c8f9a5a767ca8153ea57f9e30f1"},
+    {file = "mypy_dev-1.15.0a1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:b00c22cad99c0dede4fe64ad47dfe4b6494c3979c14f9431a98e6c4be0ec08ba"},
+    {file = "mypy_dev-1.15.0a1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:502d3c7218021eb872617b62333dd78dcc6eaee56113d18e9b68228b6a582646"},
+    {file = "mypy_dev-1.15.0a1-cp39-cp39-win_amd64.whl", hash = "sha256:a781f74e1eb736462693919f11ca56e8258f794a2d0bf77fbccebc2e8658e133"},
+    {file = "mypy_dev-1.15.0a1-py3-none-any.whl", hash = "sha256:5c595ea2629ec2d161433bc121669a3c7bcd2cd63e5d136ef018ce9cd3bc14e2"},
+    {file = "mypy_dev-1.15.0a1.tar.gz", hash = "sha256:fe80d63ff5f91443ac6f0b7ef9f74e5c074f782a22bb28cb5d5ca1941ecae938"},
+]
+
+[package.dependencies]
+mypy_extensions = ">=1.0.0"
+typing_extensions = ">=4.6.0"
+
+[package.extras]
+dmypy = ["psutil (>=4.0)"]
+faster-cache = ["orjson"]
+install-types = ["pip"]
+mypyc = ["setuptools (>=50)"]
+reports = ["lxml"]
+
+[[package]]
+name = "mypy-extensions"
+version = "1.0.0"
+description = "Type system extensions for programs checked with the mypy type checker."
+optional = false
+python-versions = ">=3.5"
+groups = ["dev"]
+files = [
+    {file = "mypy_extensions-1.0.0-py3-none-any.whl", hash = "sha256:4392f6c0eb8a5668a69e23d168ffa70f0be9ccfd32b5cc2d26a34ae5b844552d"},
+    {file = "mypy_extensions-1.0.0.tar.gz", hash = "sha256:75dbf8955dc00442a438fc4d0666508a9a97b6bd41aa2f0ffe9d2f2725af0782"},
+]
+
+[[package]]
 name = "nodeenv"
 version = "1.9.1"
 description = "Node.js virtual environment builder"
@@ -4268,4 +4323,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.14"
-content-hash = "ed8bcb9e4b5b9ccde1e74f30cef959db0ce799d62c791c7ac9a63ccc345c339e"
+content-hash = "ed5a7e205bbdda9be5b060a00aacd6aa0bb7184adfb9325a6d2e056b4af3678d"

@@ -16,6 +16,7 @@ homeassistant-stubs = "^2025.1.1"
 pre-commit = "^4.0.1"
 pytest = "^8.3.4"
 pytest-homeassistant-custom-component = "^0.13.202"
+mypy-dev = "^1.15.0a1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
