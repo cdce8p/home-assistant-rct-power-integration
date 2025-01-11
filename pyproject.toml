@@ -15,7 +15,6 @@ python = ">=3.13,<3.14"
 rctclient = "^0.0.3"
 
 [tool.poetry.group.dev.dependencies]
-homeassistant-stubs = "^2025.2.4"
 pre-commit = "^4.0.1"
 pytest = "^8.3.4"
 pytest-homeassistant-custom-component = "^0.13.214"
@@ -36,3 +35,7 @@ asyncio_mode = "auto"
 
 [tool.isort]
 profile = "black"
+
+# [[tool.mypy.overrides]]
+# module = ["homeassistant.*"]
+# follow_untyped_imports = true
