@@ -130,7 +130,7 @@ class RctPowerEntity(MultiCoordinatorEntity):
 
 
 class RctPowerSensorEntity(SensorEntity, RctPowerEntity):
-    entity_description: RctPowerSensorEntityDescription  # pyright: ignore [reportIncompatibleVariableOverride]
+    entity_description: RctPowerSensorEntityDescription
 
     def get_valid_api_responses(self) -> list[ApiResponseValue | None]:
         return [
