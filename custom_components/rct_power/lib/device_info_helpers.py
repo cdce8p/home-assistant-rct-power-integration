@@ -26,6 +26,7 @@ def get_inverter_device_info(entity: RctPowerEntity) -> DeviceInfo:
         ),
         connections=connections,
         sw_version=str(entity.get_valid_api_response_value_by_name("svnversion", "")),
+        serial_number=inverter_sn,
         model=INVERTER_MODEL,
         manufacturer=NAME,
     )
@@ -45,6 +46,7 @@ def get_battery_device_info(entity: RctPowerEntity) -> DeviceInfo:
                 "battery.bms_software_version", ""
             )
         ),
+        serial_number=bms_sn,
         model=BATTERY_MODEL,
         manufacturer=NAME,
         via_device=(DOMAIN, f"STORAGE_{inverter_sn}"),
