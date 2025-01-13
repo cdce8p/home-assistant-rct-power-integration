@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
-
 import pytest
+from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 from pytest_homeassistant_custom_component.common import (  # type: ignore[import-untyped]
@@ -12,8 +11,12 @@ from pytest_homeassistant_custom_component.common import (  # type: ignore[impor
 )
 
 from custom_components.rct_power import RctData, async_setup_entry, async_unload_entry
-from custom_components.rct_power.lib.const import DOMAIN
-from custom_components.rct_power.lib.entry import RctPowerConfigEntryData
+from custom_components.rct_power.const import (
+    CONF_ENTITY_PREFIX,
+    DEFAULT_ENTITY_PREFIX,
+    DEFAULT_PORT,
+    DOMAIN,
+)
 
 
 # We can pass fixtures as defined in conftest.py to tell pytest to use the fixture
@@ -27,8 +30,13 @@ async def test_setup_unload_and_reload_entry(hass: HomeAssistant) -> None:
     # Create a mock entry so we don't have to go through config flow
     config_entry = MockConfigEntry(
         domain=DOMAIN,
-        data=asdict(RctPowerConfigEntryData(hostname="localhost")),
+        data={
+            CONF_HOST: "localhost",
+            CONF_PORT: DEFAULT_PORT,
+            CONF_ENTITY_PREFIX: DEFAULT_ENTITY_PREFIX,
+        },
         entry_id="test",
+        version=2,
     )
 
     config_entry.add_to_hass(hass)
@@ -37,7 +45,6 @@ async def test_setup_unload_and_reload_entry(hass: HomeAssistant) -> None:
     # call, no code from custom_components/rct_power/api.py actually runs.
     assert await hass.config_entries.async_setup(config_entry.entry_id)
     await hass.async_block_till_done()
-    assert DOMAIN in hass.data
     assert isinstance(config_entry.runtime_data, RctData)
 
     # Reload the entry and assert that the data from above is still there
@@ -55,8 +62,13 @@ async def test_setup_entry_exception(hass: HomeAssistant) -> None:
     """Test ConfigEntryNotReady when API raises an exception during entry setup."""
     config_entry = MockConfigEntry(
         domain=DOMAIN,
-        data=asdict(RctPowerConfigEntryData(hostname="localhost")),
+        data={
+            CONF_HOST: "localhost",
+            CONF_PORT: DEFAULT_PORT,
+            CONF_ENTITY_PREFIX: DEFAULT_ENTITY_PREFIX,
+        },
         entry_id="test",
+        version=2,
     )
 
     # In this case we are testing the condition where async_setup_entry raises
