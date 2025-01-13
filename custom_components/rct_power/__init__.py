@@ -14,6 +14,7 @@ from homeassistant.const import CONF_HOST, CONF_MAC, CONF_PORT
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
+from homeassistant.helpers.typing import UNDEFINED
 from homeassistant.util.hass_dict import HassEntryKey
 
 from custom_components.rct_power.config_flow import async_get_mac_address_from_host
@@ -29,8 +30,9 @@ from .const import (
 )
 from .coordinator import RctPowerDataUpdateCoordinator
 from .lib.api import RctPowerApiClient
+from .lib.const import EntityUpdatePriority
 from .lib.entities import all_entity_descriptions
-from .lib.entity import EntityUpdatePriority, resolve_object_infos
+from .lib.entity import resolve_object_infos
 
 RCT_DATA_KEY: HassEntryKey[RctData] = HassEntryKey(DOMAIN)
 type RctConfigEntry = ConfigEntry[RctData]
@@ -84,7 +86,7 @@ async def async_migrate_entry(
                 connections = (
                     {(CONNECTION_NETWORK_MAC, mac)}
                     if (mac := new_data[CONF_MAC]) is not None
-                    else None
+                    else UNDEFINED
                 )
                 device_registry.async_update_device(
                     dev_entry.id,

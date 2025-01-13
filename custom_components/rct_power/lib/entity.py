@@ -13,7 +13,8 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.helpers.entity import DeviceInfo, EntityDescription
+from homeassistant.helpers.device_registry import DeviceInfo
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.typing import UNDEFINED, StateType, UndefinedType
 from rctclient.registry import REGISTRY, ObjectInfo
 
@@ -51,7 +52,7 @@ class RctPowerEntity(MultiCoordinatorEntity):
 
     def get_api_response_by_id(
         self, object_id: int, default: ApiResponse | None = None
-    ):
+    ) -> ApiResponse | None:
         for coordinator in self.coordinators:
             latest_response = coordinator.get_latest_response(object_id)
 
@@ -62,21 +63,21 @@ class RctPowerEntity(MultiCoordinatorEntity):
 
     def get_api_response_by_name(
         self, object_name: str, default: ApiResponse | None = None
-    ):
+    ) -> ApiResponse | None:
         return self.get_api_response_by_id(
             REGISTRY.get_by_name(object_name).object_id, default
         )
 
-    def get_valid_api_response_value_by_id(
-        self, object_id: int, default: ApiResponseValue | None = None
-    ):
+    def get_valid_api_response_value_by_id[
+        R: ApiResponseValue
+    ](self, object_id: int, default: R | None = None) -> ApiResponseValue | R | None:
         return get_valid_response_value_or(
             self.get_api_response_by_id(object_id, None), default
         )
 
-    def get_valid_api_response_value_by_name(
-        self, object_name: str, default: ApiResponseValue | None = None
-    ):
+    def get_valid_api_response_value_by_name[
+        R: ApiResponseValue
+    ](self, object_name: str, default: R | None = None) -> ApiResponseValue | R | None:
         return get_valid_response_value_or(
             self.get_api_response_by_name(object_name, None), default
         )
@@ -113,25 +114,25 @@ class RctPowerEntity(MultiCoordinatorEntity):
         )
 
     @cached_property
-    def unit_of_measurement(self):
+    def unit_of_measurement(self) -> str | None:
         if unit_of_measurement := super().unit_of_measurement:
             return unit_of_measurement
 
         return self.object_infos[0].unit
 
     @cached_property
-    def extra_state_attributes(self) -> Mapping[str, Any] | None:
+    def extra_state_attributes(self) -> dict[str, Any] | None:
         return {}
 
     @property
-    def device_info(self):
+    def device_info(self) -> DeviceInfo | None:
         return self.entity_description.get_device_info(self)
 
 
 class RctPowerSensorEntity(SensorEntity, RctPowerEntity):
     entity_description: RctPowerSensorEntityDescription  # pyright: ignore [reportIncompatibleVariableOverride]
 
-    def get_valid_api_responses(self):
+    def get_valid_api_responses(self) -> list[ApiResponseValue | None]:
         return [
             self.get_valid_api_response_value_by_id(object_info.object_id, None)
             for object_info in self.object_infos

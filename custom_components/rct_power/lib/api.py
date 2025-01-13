@@ -117,7 +117,7 @@ class RctPowerApiClient:
 
     async def _read_object(
         self, reader: StreamReader, writer: StreamWriter, object_id: int
-    ):
+    ) -> ApiResponse:
         object_name = REGISTRY.get_by_id(object_id).name
         read_command_frame = SendFrame(command=Command.READ, id=object_id)
 
