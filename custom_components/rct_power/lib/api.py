@@ -20,6 +20,7 @@ from rctclient.utils import decode_value
 CONNECTION_TIMEOUT = 20
 READ_TIMEOUT = 2
 INVERTER_SN_OID = 0x7924ABD9
+BATTERY_BMS_SN_OID = 0x16A1F844
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 type ApiResponseValue = (
@@ -74,13 +75,23 @@ class RctPowerApiClient:
 
     async def get_serial_number(self) -> str | None:
         inverter_data = await self.async_get_data([INVERTER_SN_OID])
-
         inverter_sn_response = inverter_data.get(INVERTER_SN_OID)
 
         if isinstance(inverter_sn_response, ValidApiResponse) and isinstance(
             inverter_sn_response.value, str
         ):
             return inverter_sn_response.value
+        else:
+            return None
+
+    async def get_battery_bms_serial_number(self) -> str | None:
+        battery_bms_data = await self.async_get_data([BATTERY_BMS_SN_OID])
+        battery_bms_sn_response = battery_bms_data.get(BATTERY_BMS_SN_OID)
+
+        if isinstance(battery_bms_sn_response, ValidApiResponse) and isinstance(
+            battery_bms_sn_response.value, str
+        ):
+            return battery_bms_sn_response.value
         else:
             return None
 

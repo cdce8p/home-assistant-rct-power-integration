@@ -12,9 +12,12 @@ from dataclasses import dataclass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_MAC, CONF_PORT
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 from homeassistant.util.hass_dict import HassEntryKey
 
 from custom_components.rct_power.config_flow import async_get_mac_address_from_host
+from custom_components.rct_power.lib.const import BATTERY_MODEL, INVERTER_MODEL
 
 from .const import (
     CONF_HOSTNAME,
@@ -52,9 +55,8 @@ async def async_migrate_entry(
         # This means the user has downgraded from a future version
         return False
 
-    if config_entry.version == 1:
-
-        new_data = {**config_entry.data}
+    new_data = config_entry.data.copy()
+    if config_entry.version < 2:
         if config_entry.minor_version < 2:
             # TODO: modify Config Entry data with changes in version 1.2
             new_data[CONF_MAC] = await async_get_mac_address_from_host(
@@ -64,9 +66,41 @@ async def async_migrate_entry(
         new_data[CONF_HOST] = config_entry.data[CONF_HOSTNAME]
         new_data.pop(CONF_HOSTNAME, None)
 
-        hass.config_entries.async_update_entry(
-            config_entry, data=new_data, version=2, minor_version=0
+        device_registry = dr.async_get(hass)
+        device_entries = dr.async_entries_for_config_entry(
+            device_registry, config_entry.entry_id
         )
+        client = RctPowerApiClient(
+            hostname=new_data[CONF_HOST],
+            port=new_data[CONF_PORT],
+        )
+        inverter_sn = await client.get_serial_number()
+        bms_sn = await client.get_battery_bms_serial_number()
+        for dev_entry in device_entries:
+            if any(ids[-1] == "None" for ids in dev_entry.identifiers):
+                device_registry.async_remove_device(dev_entry.id)
+                continue
+            if dev_entry.model == INVERTER_MODEL:
+                connections = (
+                    {(CONNECTION_NETWORK_MAC, mac)}
+                    if (mac := new_data[CONF_MAC]) is not None
+                    else None
+                )
+                device_registry.async_update_device(
+                    dev_entry.id,
+                    new_identifiers={(DOMAIN, f"STORAGE_{inverter_sn}")},
+                    new_connections=connections,
+                )
+            elif dev_entry.model == BATTERY_MODEL:
+                device_registry.async_get_device
+                device_registry.async_update_device(
+                    dev_entry.id,
+                    new_identifiers={(DOMAIN, f"BATTERY_{bms_sn}")},
+                )
+
+    hass.config_entries.async_update_entry(
+        config_entry, data=new_data, version=2, minor_version=0
+    )
 
     LOGGER.info(
         "Migration to configuration version %s.%s successful",
