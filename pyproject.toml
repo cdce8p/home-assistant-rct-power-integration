@@ -33,6 +33,9 @@ asyncio_mode = "auto"
 [tool.isort]
 profile = "black"
 
-# [[tool.mypy.overrides]]
-# module = ["homeassistant.*"]
-# follow_untyped_imports = true
+[tool.mypy]
+strict = true
+
+[[tool.mypy.overrides]]
+module = ["getmac.*"]
+follow_untyped_imports = true
