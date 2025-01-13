@@ -6,7 +6,6 @@ authors = ["Felix Stürmer <stuermer@weltenwort.de>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-async_timeout = "^4.0.0"
 homeassistant = "^2024.12.0"
 python = ">=3.12,<3.14"
 rctclient = "^0.0.3"
