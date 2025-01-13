@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "description": "If you need help with the configuration have a look here: https://github.com/weltenwort/home-assistant-rct-power-integration",
+        "description": "If you need help with the configuration have a look here: https://github.com/cdce8p/home-assistant-rct-power-integration",
         "data": {
           "model": "Model",
           "hostname": "Host name",
@@ -19,7 +19,7 @@
   },
   "options": {
     "step": {
-      "user": {
+      "init": {
         "data": {
           "objects": "Enabled objects",
           "scan_interval": "Polling interval"

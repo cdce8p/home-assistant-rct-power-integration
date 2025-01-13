@@ -2,33 +2,35 @@
 Custom integration to integrate RCT Power with Home Assistant.
 
 For more details about this integration, please refer to
-https://github.com/weltenwort/home-assistant-rct-power-integration
+https://github.com/cdce8p/home-assistant-rct-power-integration
 """
 
 from __future__ import annotations
 
-import logging
 from dataclasses import dataclass
-from datetime import timedelta
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_HOST, CONF_MAC, CONF_PORT
 from homeassistant.core import HomeAssistant
-from homeassistant.core_config import Config
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.util.hass_dict import HassEntryKey
 
+from custom_components.rct_power.config_flow import async_get_mac_address_from_host
+
+from .const import (
+    CONF_HOSTNAME,
+    DOMAIN,
+    LOGGER,
+    PLATFORMS,
+    ConfScanInterval,
+    ScanIntervalDefault,
+)
+from .coordinator import RctPowerDataUpdateCoordinator
 from .lib.api import RctPowerApiClient
-from .lib.const import DOMAIN, PLATFORMS, STARTUP_MESSAGE
 from .lib.entities import all_entity_descriptions
 from .lib.entity import EntityUpdatePriority, resolve_object_infos
-from .lib.entry import RctPowerConfigEntryData, RctPowerConfigEntryOptions
-from .lib.update_coordinator import RctPowerDataUpdateCoordinator
 
-SCAN_INTERVAL = timedelta(seconds=30)
 RCT_DATA_KEY: HassEntryKey[RctData] = HassEntryKey(DOMAIN)
 type RctConfigEntry = ConfigEntry[RctData]
-
-_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 @dataclass
@@ -36,22 +38,50 @@ class RctData:
     update_coordinators: dict[EntityUpdatePriority, RctPowerDataUpdateCoordinator]
 
 
-async def async_setup(hass: HomeAssistant, config: Config) -> bool:
-    """Set up this integration using YAML is not supported."""
+async def async_migrate_entry(
+    hass: HomeAssistant, config_entry: RctConfigEntry
+) -> bool:
+    """Migrate old entry."""
+    LOGGER.info(
+        "Migrating configuration from version %s.%s",
+        config_entry.version,
+        config_entry.minor_version,
+    )
+
+    if config_entry.version > 2:
+        # This means the user has downgraded from a future version
+        return False
+
+    if config_entry.version == 1:
+
+        new_data = {**config_entry.data}
+        if config_entry.minor_version < 2:
+            # TODO: modify Config Entry data with changes in version 1.2
+            new_data[CONF_MAC] = await async_get_mac_address_from_host(
+                hass, config_entry.data[CONF_HOSTNAME]
+            )
+
+        new_data[CONF_HOST] = config_entry.data[CONF_HOSTNAME]
+        new_data.pop(CONF_HOSTNAME, None)
+
+        hass.config_entries.async_update_entry(
+            config_entry, data=new_data, version=2, minor_version=0
+        )
+
+    LOGGER.info(
+        "Migration to configuration version %s.%s successful",
+        config_entry.version,
+        config_entry.minor_version,
+    )
+
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     """Set up this integration using UI."""
-    if not (data := hass.data.setdefault(DOMAIN, {})):
-        _LOGGER.info(STARTUP_MESSAGE)
-        data["startup_message"] = True
-
-    config_entry_data = RctPowerConfigEntryData.from_config_entry(entry)
-    config_entry_options = RctPowerConfigEntryOptions.from_config_entry(entry)
-
     client = RctPowerApiClient(
-        hostname=config_entry_data.hostname, port=config_entry_data.port
+        hostname=entry.data[CONF_HOST],
+        port=entry.data[CONF_PORT],
     )
 
     frequently_updated_object_ids = list(
@@ -64,11 +94,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     )
     frequent_update_coordinator = RctPowerDataUpdateCoordinator(
         hass=hass,
-        logger=_LOGGER,
-        name=f"{DOMAIN} {entry.unique_id} frequent",
-        update_interval=timedelta(seconds=config_entry_options.frequent_scan_interval),
-        object_ids=frequently_updated_object_ids,
+        entry=entry,
+        name_suffix="frequent",
         client=client,
+        object_ids=frequently_updated_object_ids,
+        update_interval=entry.options.get(
+            ConfScanInterval.FREQUENT, ScanIntervalDefault.FREQUENT
+        ),
     )
 
     infrequently_updated_object_ids = list(
@@ -81,13 +113,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     )
     infrequent_update_coordinator = RctPowerDataUpdateCoordinator(
         hass=hass,
-        logger=_LOGGER,
-        name=f"{DOMAIN} {entry.unique_id} infrequent",
-        update_interval=timedelta(
-            seconds=config_entry_options.infrequent_scan_interval
-        ),
-        object_ids=infrequently_updated_object_ids,
+        entry=entry,
+        name_suffix="infrequent",
         client=client,
+        object_ids=infrequently_updated_object_ids,
+        update_interval=entry.options.get(
+            ConfScanInterval.INFREQUENT, ScanIntervalDefault.INFREQUENT
+        ),
     )
 
     static_object_ids = list(
@@ -100,23 +132,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     )
     static_update_coordinator = RctPowerDataUpdateCoordinator(
         hass=hass,
-        logger=_LOGGER,
-        name=f"{DOMAIN} {entry.unique_id} static",
-        update_interval=timedelta(seconds=config_entry_options.static_scan_interval),
-        object_ids=static_object_ids,
+        entry=entry,
+        name_suffix="static",
         client=client,
+        object_ids=static_object_ids,
+        update_interval=entry.options.get(
+            ConfScanInterval.STATIC, ScanIntervalDefault.STATIC
+        ),
     )
-
-    await frequent_update_coordinator.async_refresh()
-    await infrequent_update_coordinator.async_refresh()
-    await static_update_coordinator.async_refresh()
-
-    if not (
-        frequent_update_coordinator.last_update_success
-        and infrequent_update_coordinator.last_update_success
-        and static_update_coordinator.last_update_success
-    ):
-        raise ConfigEntryNotReady
+    await frequent_update_coordinator.async_config_entry_first_refresh()
+    await infrequent_update_coordinator.async_config_entry_first_refresh()
+    await static_update_coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = RctData(
         {
@@ -126,10 +152,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
         }
     )
 
-    remove_update_listener = entry.add_update_listener(async_reload_entry)
-    entry.async_on_unload(remove_update_listener)
-
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     return True
 
@@ -141,5 +166,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool
 
 async def async_reload_entry(hass: HomeAssistant, entry: RctConfigEntry) -> None:
     """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    await hass.config_entries.async_reload(entry.entry_id)

@@ -17,6 +17,8 @@ from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.typing import UNDEFINED, StateType, UndefinedType
 from rctclient.registry import REGISTRY, ObjectInfo
 
+from ..const import CONF_ENTITY_PREFIX
+from ..coordinator import RctPowerDataUpdateCoordinator
 from .api import (
     ApiResponse,
     ApiResponseValue,
@@ -25,13 +27,11 @@ from .api import (
 )
 from .const import ICON, EntityUpdatePriority
 from .device_class_helpers import guess_device_class_from_unit
-from .entry import RctPowerConfigEntryData
 from .multi_coordinator_entity import MultiCoordinatorEntity
 from .state_helpers import (
     get_api_response_values_as_bitfield,
     get_first_api_response_value_as_state,
 )
-from .update_coordinator import RctPowerDataUpdateCoordinator
 
 
 class RctPowerEntity(MultiCoordinatorEntity):
@@ -81,10 +81,6 @@ class RctPowerEntity(MultiCoordinatorEntity):
             self.get_api_response_by_name(object_name, None), default
         )
 
-    @property
-    def config_entry_data(self) -> RctPowerConfigEntryData:
-        return RctPowerConfigEntryData.from_config_entry(self.config_entry)
-
     @cached_property
     def unique_id(self) -> str | None:
         """Return a unique ID to use for this entity."""
@@ -105,7 +101,7 @@ class RctPowerEntity(MultiCoordinatorEntity):
             else slugify_entity_name(self.object_infos[0].name)
         )
 
-        return f"{self.config_entry_data.entity_prefix} {entity_name}"
+        return f"{self.config_entry.data[CONF_ENTITY_PREFIX]} {entity_name}"
 
     @property
     def available(self) -> bool:
