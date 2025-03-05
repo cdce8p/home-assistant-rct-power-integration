@@ -165,7 +165,7 @@ battery_sensor_entity_descriptions: list[RctPowerSensorEntityDescription] = [
     RctPowerSensorEntityDescription(
         get_device_info=get_battery_device_info,
         key="power_mng.soc_min_island",
-        name="Battery Minimum State of Charge (island)",
+        name="Battery Minimum State of Charge (Island)",
         update_priority=EntityUpdatePriority.FREQUENT,
         state_class=SensorStateClass.MEASUREMENT,
         native_unit_of_measurement="%",
