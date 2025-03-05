@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal, get_args
+from enum import StrEnum
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.typing import StateType
@@ -79,10 +79,16 @@ def sum_api_response_values_as_state(
 #
 # Battery status
 #
-BatteryStatus = Literal[
-    "normal", "charging", "discharging", "calibrating", "balancing", "other"
-]
-available_battery_status: list[BatteryStatus] = list(get_args(BatteryStatus))
+class BatteryStatus(StrEnum):
+    NORMAL = "normal"
+    CHARGING = "charging"
+    DISCHARGING = "discharging"
+    CALIBRATING = "calibrating"
+    BALANCING = "balancing"
+    OTHER = "other"
+
+
+available_battery_status: list[str] = list(BatteryStatus._value2member_map_)
 
 
 def get_api_response_value_as_battery_status(
@@ -94,17 +100,17 @@ def get_api_response_value_as_battery_status(
 
     match BatteryStatusFlag(value):
         case BatteryStatusFlag.calibrating:
-            return "calibrating"
+            return BatteryStatus.CALIBRATING
         case BatteryStatusFlag.charging:
-            return "charging"
+            return BatteryStatus.CHARGING
         case BatteryStatusFlag.discharging:
-            return "discharging"
+            return BatteryStatus.DISCHARGING
         case BatteryStatusFlag.balancing:
-            return "balancing"
+            return BatteryStatus.BALANCING
         case BatteryStatusFlag.normal:
-            return "normal"
+            return BatteryStatus.NORMAL
         case _:
-            return "other"
+            return BatteryStatus.OTHER
 
 
 def get_first_api_response_value_as_battery_status(
