@@ -138,14 +138,7 @@ async def async_setup_entry(
 
 async def async_unload_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     """Handle removal of an entry."""
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
-    if (
-        unload_ok
-        and len(entries := hass.config_entries.async_loaded_entries(DOMAIN)) == 1
-        and entries[0].entry_id == entry.entry_id
-    ):
-        hass.data.pop(DOMAIN)
-    return unload_ok
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 
 async def async_reload_entry(hass: HomeAssistant, entry: RctConfigEntry) -> None:

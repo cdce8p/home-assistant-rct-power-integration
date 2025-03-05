@@ -47,7 +47,6 @@ async def test_setup_unload_and_reload_entry(
     # Unload the entry and verify that the data has been removed
     assert await async_unload_entry(hass, config_entry)
     await hass.async_block_till_done()
-    assert DOMAIN not in hass.data
 
 
 async def test_setup_entry_exception(hass: HomeAssistant, error_on_get_data: None):
