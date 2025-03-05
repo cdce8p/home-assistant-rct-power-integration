@@ -17,9 +17,7 @@ from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 from homeassistant.helpers.typing import UNDEFINED
 from homeassistant.util.hass_dict import HassEntryKey
 
-from custom_components.rct_power.config_flow import async_get_mac_address_from_host
-from custom_components.rct_power.lib.const import BATTERY_MODEL, INVERTER_MODEL
-
+from .config_flow import async_get_mac_address_from_host
 from .const import (
     CONF_HOSTNAME,
     DOMAIN,
@@ -30,7 +28,7 @@ from .const import (
 )
 from .coordinator import RctPowerDataUpdateCoordinator
 from .lib.api import RctPowerApiClient
-from .lib.const import EntityUpdatePriority
+from .lib.const import BATTERY_MODEL, INVERTER_MODEL, EntityUpdatePriority
 from .lib.entities import all_entity_descriptions
 from .lib.entity import resolve_object_infos
 
