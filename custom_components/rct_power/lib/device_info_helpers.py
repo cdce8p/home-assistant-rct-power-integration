@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from homeassistant.const import CONF_MAC
+from homeassistant.const import ATTR_CONNECTIONS, CONF_MAC
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 
 from ..const import DOMAIN
@@ -10,23 +10,25 @@ from .entity import RctPowerEntity
 
 def get_inverter_device_info(entity: RctPowerEntity) -> DeviceInfo:
     inverter_sn = str(entity.get_valid_api_response_value_by_name("inverter_sn", None))
-    connections: set[tuple[str, str]] = (
+    connections: set[tuple[str, str]] | None = (
         {(CONNECTION_NETWORK_MAC, mac)}
         if (mac := entity.coordinators[0].config_entry.data.get(CONF_MAC)) is not None
-        else set()
+        else None
     )
 
-    return DeviceInfo(
+    info = DeviceInfo(
         identifiers={(DOMAIN, f"STORAGE_{inverter_sn}")},
         name=str(
             entity.get_valid_api_response_value_by_name("android_description", ""),
         ),
-        connections=connections,
         sw_version=str(entity.get_valid_api_response_value_by_name("svnversion", "")),
         serial_number=inverter_sn,
         model=INVERTER_MODEL,
         manufacturer=NAME,
     )
+    if connections is not None:
+        info[ATTR_CONNECTIONS] = connections
+    return info
 
 
 def get_battery_device_info(entity: RctPowerEntity) -> DeviceInfo:
