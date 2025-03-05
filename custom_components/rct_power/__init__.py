@@ -14,14 +14,13 @@ from typing import Literal
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
 from homeassistant.helpers.typing import ConfigType
 from homeassistant.util.hass_dict import HassEntryKey
 
 from .lib.api import RctPowerApiClient
-from .lib.const import DOMAIN, PLATFORMS, STARTUP_MESSAGE
+from .lib.const import DOMAIN, PLATFORMS, STARTUP_MESSAGE, EntityUpdatePriority
 from .lib.entities import all_entity_descriptions
-from .lib.entity import EntityUpdatePriority, resolve_object_infos
+from .lib.entity import resolve_object_infos
 from .lib.entry import RctPowerConfigEntryData, RctPowerConfigEntryOptions
 from .lib.update_coordinator import RctPowerDataUpdateCoordinator
 
@@ -111,16 +110,9 @@ async def async_setup_entry(
         client=client,
     )
 
-    await frequent_update_coordinator.async_refresh()
-    await infrequent_update_coordinator.async_refresh()
-    await static_update_coordinator.async_refresh()
-
-    if not (
-        frequent_update_coordinator.last_update_success
-        and infrequent_update_coordinator.last_update_success
-        and static_update_coordinator.last_update_success
-    ):
-        raise ConfigEntryNotReady
+    await frequent_update_coordinator.async_config_entry_first_refresh()
+    await infrequent_update_coordinator.async_config_entry_first_refresh()
+    await static_update_coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = RctData(
         {
