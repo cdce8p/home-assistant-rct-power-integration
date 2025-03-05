@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from logging import Logger
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
+from ..const import LOGGER
 from .api import ApiResponseValue, RctPowerApiClient, RctPowerData, ValidApiResponse
 
 
@@ -16,7 +16,6 @@ class RctPowerDataUpdateCoordinator(DataUpdateCoordinator[RctPowerData]):
         self,
         hass: HomeAssistant,
         name: str,
-        logger: Logger,
         client: RctPowerApiClient,
         object_ids: list[int],
         update_interval: timedelta | None = None,
@@ -25,7 +24,7 @@ class RctPowerDataUpdateCoordinator(DataUpdateCoordinator[RctPowerData]):
         self.object_ids = object_ids
 
         super().__init__(
-            hass=hass, logger=logger, name=name, update_interval=update_interval
+            hass=hass, logger=LOGGER, name=name, update_interval=update_interval
         )
 
     def get_latest_response(self, object_id: int):
