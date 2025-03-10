@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_MAC, CONF_PORT
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC
 from homeassistant.helpers.typing import UNDEFINED
@@ -33,6 +34,7 @@ from .lib.entities import all_entity_descriptions
 from .lib.entity import resolve_object_infos
 
 RCT_DATA_KEY: HassEntryKey[RctData] = HassEntryKey(DOMAIN)
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 type RctConfigEntry = ConfigEntry[RctData]
 
