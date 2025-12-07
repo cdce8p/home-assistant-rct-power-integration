@@ -8,7 +8,6 @@ https://github.com/weltenwort/home-assistant-rct-power-integration
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import timedelta
 from typing import cast
 
 from homeassistant.config_entries import ConfigEntry
@@ -55,12 +54,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     frequent_update_coordinator = RctPowerDataUpdateCoordinator(
         hass=hass,
         entry=entry,
-        name_suffix="frequent",
-        update_interval=timedelta(
-            seconds=options.get(ConfScanInterval.FREQUENT, ScanIntervalDefault.FREQUENT)
-        ),
-        object_ids=frequently_updated_object_ids,
         client=client,
+        name_suffix="frequent",
+        object_ids=frequently_updated_object_ids,
+        update_interval=options.get(
+            ConfScanInterval.FREQUENT, ScanIntervalDefault.FREQUENT
+        ),
     )
 
     infrequently_updated_object_ids = list(
@@ -74,14 +73,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     infrequent_update_coordinator = RctPowerDataUpdateCoordinator(
         hass=hass,
         entry=entry,
-        name_suffix="infrequent",
-        update_interval=timedelta(
-            seconds=options.get(
-                ConfScanInterval.INFREQUENT, ScanIntervalDefault.INFREQUENT
-            ),
-        ),
-        object_ids=infrequently_updated_object_ids,
         client=client,
+        name_suffix="infrequent",
+        object_ids=infrequently_updated_object_ids,
+        update_interval=options.get(
+            ConfScanInterval.INFREQUENT, ScanIntervalDefault.INFREQUENT
+        ),
     )
 
     static_object_ids = list(
@@ -95,12 +92,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: RctConfigEntry) -> bool:
     static_update_coordinator = RctPowerDataUpdateCoordinator(
         hass=hass,
         entry=entry,
-        name_suffix="static",
-        update_interval=timedelta(
-            seconds=options.get(ConfScanInterval.STATIC, ScanIntervalDefault.STATIC),
-        ),
-        object_ids=static_object_ids,
         client=client,
+        name_suffix="static",
+        object_ids=static_object_ids,
+        update_interval=options.get(
+            ConfScanInterval.STATIC, ScanIntervalDefault.STATIC
+        ),
     )
 
     await frequent_update_coordinator.async_config_entry_first_refresh()
