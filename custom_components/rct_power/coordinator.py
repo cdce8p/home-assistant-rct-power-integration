@@ -57,8 +57,5 @@ class RctPowerDataUpdateCoordinator(DataUpdateCoordinator[RctPowerData]):
             return latest_response.value
         return default_value
 
-    def has_valid_value(self, object_id: int) -> bool:
-        return isinstance(self.get_latest_response(object_id), ValidApiResponse)
-
     async def _async_update_data(self) -> RctPowerData:
         return await self.client.async_get_data(object_ids=self.object_ids)

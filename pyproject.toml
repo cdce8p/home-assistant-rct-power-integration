@@ -20,6 +20,7 @@ packages = [
 python = ">=3.13.2,<3.15"
 homeassistant = ">=2025.11.0"
 rctclient = "^0.0.3"
+getmac = "^0.9.5"
 
 [tool.poetry.group.dev.dependencies]
 mypy-dev = "^1.16.0a4"
@@ -40,3 +41,7 @@ extend-select = [
 
 [tool.mypy]
 strict = true
+
+[[tool.mypy.overrides]]
+module = ["getmac.*"]
+follow_untyped_imports = true

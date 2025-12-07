@@ -19,7 +19,7 @@
   },
   "options": {
     "step": {
-      "user": {
+      "init": {
         "data": {
           "objects": "Enabled objects",
           "scan_interval": "Polling interval"

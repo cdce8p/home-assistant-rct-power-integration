@@ -4,7 +4,7 @@ from typing import TypedDict
 
 
 class RctConfEntryData(TypedDict):
-    hostname: str
+    host: str
     port: int
 
 
