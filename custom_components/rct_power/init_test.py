@@ -10,7 +10,7 @@ from pytest_homeassistant_custom_component.common import (  # type: ignore[impor
     MockConfigEntry,
 )
 
-from custom_components.rct_power import RctData, async_setup_entry
+from custom_components.rct_power import RctData, async_setup_entry, async_unload_entry
 from custom_components.rct_power.const import (
     CONF_ENTITY_PREFIX,
     DEFAULT_ENTITY_PREFIX,
@@ -51,6 +51,10 @@ async def test_setup_unload_and_reload_entry(hass: HomeAssistant) -> None:
     assert await hass.config_entries.async_reload(config_entry.entry_id)
     await hass.async_block_till_done()
     assert isinstance(config_entry.runtime_data, RctData)
+
+    # Unload the entry and verify that the data has been removed
+    assert await async_unload_entry(hass, config_entry)
+    await hass.async_block_till_done()
 
 
 @pytest.mark.usefixtures("error_on_get_data")
