@@ -2,42 +2,72 @@
 
 rules:
   # Bronze
-  action-setup: todo
-  appropriate-polling: todo
+  action-setup:
+    status: done
+    comment: No actions.
+  appropriate-polling:
+    status: todo
+    comment: |
+      Remove polling options. Users should use a polling automation instead.
+      https://www.home-assistant.io/common-tasks/general/#defining-a-custom-polling-interval
   brands: todo
-  common-modules: todo
+  common-modules:
+    status: todo
+    comment: |
+      Create base entity file.
+      => Remove lib subfolder.
   config-flow-test-coverage: todo
-  config-flow: todo
+  config-flow:
+    status: todo
+    comment: |
+      Move 'entity_prefix' to options.
+      Make Host + Port configurable.
+      Use 'strings.json' + 'data_description'
   dependency-transparency: todo
-  docs-actions: todo
+  docs-actions:
+    status: done
+    comment: No actions.
   docs-high-level-description: todo
   docs-installation-instructions: todo
   docs-removal-instructions: todo
   entity-event-setup: todo
   entity-unique-id: todo
   has-entity-name: todo
-  runtime-data: todo
-  test-before-configure: todo
-  test-before-setup: todo
+  runtime-data: done
+  test-before-configure: done
+  test-before-setup:
+    status: done
+    comment: Implicitly via coordinator.async_config_entry_first_refresh.
   unique-config-entry: todo
 
   # Silver
-  action-exceptions: todo
-  config-entry-unloading: todo
+  action-exceptions:
+    status: done
+    comment: No actions.
+  config-entry-unloading: done
   docs-configuration-parameters: todo
   docs-installation-parameters: todo
-  entity-unavailable: todo
-  integration-owner: todo
-  log-when-unavailable: todo
-  parallel-updates: todo
-  reauthentication-flow: todo
+  entity-unavailable: done
+  integration-owner:
+    status: todo
+    comment: Add myself.
+  log-when-unavailable: done
+  parallel-updates:
+    status: todo
+    comment: Coordinator and no actions, set PARALLEL_UPDATES to 0.
+  reauthentication-flow:
+    status: exempt
+    comment: |
+      Integration has no authentication.
   test-coverage: todo
-
   # Gold
   devices: todo
   diagnostics: todo
   discovery-update-info: todo
-  discovery: todo
+  discovery:
+    status: exempt
+    comment: |
+      RCT doesn't support any provided discovery method.
   docs-data-update: todo
   docs-examples: todo
   docs-known-limitations: todo
@@ -52,11 +82,15 @@ rules:
   entity-translations: todo
   exception-translations: todo
   icon-translations: todo
-  reconfiguration-flow: todo
+  reconfiguration-flow:
+    status: todo
+    comment: Make Host + Port configurable
   repair-issues: todo
   stale-devices: todo
 
   # Platinum
   async-dependency: todo
-  inject-websession: todo
+  inject-websession:
+    status: exempt
+    comment: The library uses raw asyncio connections.
   strict-typing: todo
